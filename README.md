@@ -10,6 +10,8 @@ interfere with each other.
 
 See the [Go package documentation][] for instructions how to use this package.
 
+This is not an officially supported Google product.
+
 [rules_go]: https://github.com/bazelbuild/rules_go
 [runfiles libraries proposal]: https://docs.google.com/document/d/e/2PACX-1vSDIrFnFvEYhKsCMdGdD40wZRBX3m3aZ5HhVj4CtHPmiXKDCxioTUbYsDydjKtFDAzER5eg7OjJWs3V/pub
 [official Bazel library]: https://pkg.go.dev/github.com/bazelbuild/rules_go/go/tools/bazel?tab=doc
