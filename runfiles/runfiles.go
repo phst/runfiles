@@ -27,7 +27,7 @@
 //       name = "phst_runfiles",
 //       urls = ["https://github.com/phst/runfiles/archive/6763ec308791c6869e69822c87f319e9e650f108.zip"],
 //       sha256 = "c737126c3b7e5afe366292ab757f39e69faee4628d3ed262f7abe232cd891b78",
-//       strip_prefix = "runfiles-6763ec308791c6869e69822c87f319e9e650f108"
+//       strip_prefix = "runfiles-6763ec308791c6869e69822c87f319e9e650f108",
 //   )
 //
 // Usage
