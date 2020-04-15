@@ -40,7 +40,7 @@ go_test(
 go_binary(
     name = "testprog",
     testonly = 1,
-    srcs = ["testprog.go"],
+    srcs = ["testprog/main.go"],
     out = "testprog",
     data = ["test.txt"],
     deps = [":runfiles"],
