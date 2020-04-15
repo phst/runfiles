@@ -20,20 +20,4 @@ shopt -s failglob
 
 IFS=''
 
-sha256() {
-  wget --no-verbose --output-document=- -- "${url:?}" \
-    | sha256sum \
-    | cut --fields=1 --delimiter=' '
-}
-
-shopt -s -o xtrace
-
-rev="$(git rev-parse remotes/github/master)"
-url="https://github.com/phst/runfiles/archive/${rev:?}.zip"
-hash="$(sha256 "${url:?}")"
-
-sed --sandbox --in-place --regexp-extended \
-  --expression="s|^(// +urls = \\[\"https://github.com/phst/runfiles/archive/)([[:xdigit:]]*)(\\.zip\"\\],)\$|\1${rev:?}\3|" \
-  --expression="s|^(// +strip_prefix = \"runfiles-)([[:xdigit:]]*)(\",)\$|\1${rev:?}\3|" \
-  --expression="s|^(// +sha256 = \")([[:xdigit:]]*)(\",)\$|\1${hash:?}\3|" \
-  -- runfiles/runfiles.go
+update-workspace-snippets runfiles/runfiles.go
