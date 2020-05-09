@@ -12,36 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "runfiles",
-    srcs = glob(
-        ["*.go"],
-        exclude = [
-            "*_test.go",
-            "testprog.go",
-        ],
-    ),
-    importpath = "github.com/phst/runfiles",
-    visibility = ["//visibility:public"],
-)
-
-go_test(
-    name = "runfiles_test",
-    srcs = glob(["*_test.go"]),
-    data = [
-        "test.txt",
-        "testprog",
-    ],
-    deps = [":runfiles"],
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "github.com/phst/runfiles/testprog",
+    visibility = ["//visibility:private"],
+    deps = ["//:go_default_library"],
 )
 
 go_binary(
     name = "testprog",
-    testonly = 1,
-    srcs = ["testprog/main.go"],
     out = "testprog",
-    data = ["test.txt"],
-    deps = [":runfiles"],
+    data = ["//:test.txt"],
+    embed = [":go_default_library"],
+    visibility = ["//:__pkg__"],
 )

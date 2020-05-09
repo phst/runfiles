@@ -20,4 +20,4 @@ shopt -s failglob
 
 IFS=''
 
-update-workspace-snippets runfiles/runfiles.go
+update-workspace-snippets runfiles.go

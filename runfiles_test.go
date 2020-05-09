@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package runfiles_test
 
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
+	"os/exec"
 
 	"github.com/phst/runfiles"
 )
 
-func main() {
-	path, err := runfiles.Path("phst_runfiles/runfiles/test.txt")
+func ExamplePath() {
+	path, err := runfiles.Path("com_github_phst_runfiles/test.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -31,4 +33,26 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(string(b))
+	// Output: hi!
+}
+
+func ExampleRunfiles() {
+	r, err := runfiles.New()
+	if err != nil {
+		panic(err)
+	}
+	// The binary “testprog” is itself built with Bazel, and needs
+	// runfiles.
+	prog, err := r.Path("com_github_phst_runfiles/testprog/testprog")
+	if err != nil {
+		panic(err)
+	}
+	cmd := exec.Command(prog)
+	cmd.Env = append(os.Environ(), r.Env()...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		panic(err)
+	}
+	// Output: hi!
 }
