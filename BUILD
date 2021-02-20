@@ -19,6 +19,7 @@ go_library(
     name = "go_default_library",
     srcs = [
         "directory.go",
+        "fs.go",
         "global.go",
         "manifest.go",
         "runfiles.go",
@@ -29,7 +30,10 @@ go_library(
 
 go_test(
     name = "go_default_test",
-    srcs = ["runfiles_test.go"],
+    srcs = [
+        "fs_test.go",
+        "runfiles_test.go",
+    ],
     data = [
         "test.txt",
         "//testprog",

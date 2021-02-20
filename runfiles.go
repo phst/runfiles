@@ -1,4 +1,4 @@
-// Copyright 2020 Google LLC
+// Copyright 2020, 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,7 +47,8 @@
 // If you need hermetic behavior or want to change the runfiles discovery
 // process, use New to create a Runfiles object.  New accepts a few options to
 // change the discovery process.  Runfiles objects have methods Path and Env,
-// which correspond to the package-level functions.
+// which correspond to the package-level functions.  On Go 1.16, *Runfiles
+// implements fs.FS, fs.StatFS, and fs.ReadFileFS.
 package runfiles
 
 import (
