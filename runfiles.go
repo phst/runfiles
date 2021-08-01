@@ -61,8 +61,8 @@ import (
 
 // Runfiles allows access to Bazel runfiles.  Use New to create Runfiles
 // objects; the zero Runfiles object is not valid.  See
-// https://docs.bazel.build/versions/master/skylark/rules.html#runfiles for
-// some information on Bazel runfiles.
+// https://docs.bazel.build/skylark/rules.html#runfiles for some information on
+// Bazel runfiles.
 type Runfiles struct {
 	// We don’t need concurrency control since Runfiles objects are
 	// immutable once created.
