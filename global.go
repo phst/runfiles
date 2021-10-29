@@ -41,22 +41,18 @@ func Env() ([]string, error) {
 }
 
 type global struct {
-	mu sync.Mutex
-	r  *Runfiles
+	once sync.Once
+	r    *Runfiles
+	err  error
 }
 
 func (g *global) get() (*Runfiles, error) {
-	g.mu.Lock()
-	defer g.mu.Unlock()
-	if g.r != nil {
-		return g.r, nil
-	}
-	r, err := New()
-	if err != nil {
-		return nil, err
-	}
-	g.r = r
-	return r, nil
+	g.once.Do(g.init)
+	return g.r, g.err
+}
+
+func (g *global) init() {
+	g.r, g.err = New()
 }
 
 var g global
