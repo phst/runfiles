@@ -60,7 +60,7 @@ import (
 )
 
 // Runfiles allows access to Bazel runfiles.  Use New to create Runfiles
-// objects; the zero Runfiles object is not valid.  See
+// objects; the zero Runfiles object always returns errors.  See
 // https://docs.bazel.build/skylark/rules.html#runfiles for some information on
 // Bazel runfiles.
 type Runfiles struct {
@@ -107,7 +107,8 @@ func New(opts ...Option) (*Runfiles, error) {
 }
 
 // Path returns the absolute path name of a runfile.  The runfile name must be
-// a relative path, using the slash (not backslash) as directory separator.
+// a relative path, using the slash (not backslash) as directory separator.  If
+// r is the zero Runfiles object, Path always returns an error.
 func (r *Runfiles) Path(s string) (string, error) {
 	// See section “Library interface” in
 	// https://docs.google.com/document/d/e/2PACX-1vSDIrFnFvEYhKsCMdGdD40wZRBX3m3aZ5HhVj4CtHPmiXKDCxioTUbYsDydjKtFDAzER5eg7OjJWs3V/pub.
@@ -123,7 +124,11 @@ func (r *Runfiles) Path(s string) (string, error) {
 	if s == ".." || strings.HasPrefix(s, "../") {
 		return "", fmt.Errorf("runfiles: name %s may not contain a parent directory", s)
 	}
-	p := r.impl.path(s)
+	impl := r.impl
+	if impl == nil {
+		return "", errors.New("uninitialized Runfiles object")
+	}
+	p := impl.path(s)
 	if p == "" {
 		return "", &os.PathError{"stat", s, os.ErrNotExist}
 	}
@@ -135,8 +140,12 @@ func (r *Runfiles) Path(s string) (string, error) {
 // Bazel-built binaries so they can find their runfiles as well.  See the
 // Runfiles example for an illustration of this.
 //
-// The return value is a newly-allocated slice; you can modify it at will.
+// The return value is a newly-allocated slice; you can modify it at will.  If
+// r is the zero Runfiles object, the return value is nil.
 func (r *Runfiles) Env() []string {
+	if r.env == "" {
+		return nil
+	}
 	return []string{r.env}
 }
 

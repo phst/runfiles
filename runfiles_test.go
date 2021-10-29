@@ -72,3 +72,13 @@ func TestPath_errors(t *testing.T) {
 		})
 	}
 }
+
+func TestRunfiles_zero(t *testing.T) {
+	var r runfiles.Runfiles
+	if got, err := r.Path("a"); err == nil {
+		t.Errorf("Path: got %q, want error", got)
+	}
+	if got := r.Env(); got != nil {
+		t.Errorf("Env: got %v, want nil", got)
+	}
+}
