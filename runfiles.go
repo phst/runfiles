@@ -25,9 +25,9 @@
 //   load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 //   http_archive(
 //       name = "com_github_phst_runfiles",
-//       urls = ["https://github.com/phst/runfiles/archive/3c0b2cbc6a46df87393707fede30651f4b0c6e0a.zip"],
-//       sha256 = "d61487694bd553c6e4e9e5a80229336f47ad61d2d3a4f43a4197d46915041b32",
-//       strip_prefix = "runfiles-3c0b2cbc6a46df87393707fede30651f4b0c6e0a",
+//       urls = ["https://github.com/phst/runfiles/archive/60eb03913791bc1cd69c7b2d4316395927c087a8.zip"],
+//       sha256 = "84d9bff5719e4d2a3daea5302dd61fed3539675f3211204a31f379db87df9e6a",
+//       strip_prefix = "runfiles-60eb03913791bc1cd69c7b2d4316395927c087a8",
 //   )
 //
 // Usage
