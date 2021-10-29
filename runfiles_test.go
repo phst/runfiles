@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"testing"
 
 	"github.com/phst/runfiles"
 )
@@ -56,4 +57,18 @@ func ExampleRunfiles() {
 		panic(err)
 	}
 	// Output: hi!
+}
+
+func TestPath_errors(t *testing.T) {
+	r, err := runfiles.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, s := range []string{"", "..", "../", "a/../b", "a//b", "a/./b", "/a"} {
+		t.Run(s, func(t *testing.T) {
+			if got, err := r.Path(s); err == nil {
+				t.Errorf("got %q, want error", got)
+			}
+		})
+	}
 }
