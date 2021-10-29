@@ -120,7 +120,7 @@ func (r *Runfiles) Path(s string) (string, error) {
 	if s != path.Clean(s) {
 		return "", fmt.Errorf("runfiles: name %s must be canonical", s)
 	}
-	if strings.HasPrefix(s, "../") {
+	if s == ".." || strings.HasPrefix(s, "../") {
 		return "", fmt.Errorf("runfiles: name %s may not contain a parent directory", s)
 	}
 	p := r.impl.path(s)
