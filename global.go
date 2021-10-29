@@ -1,4 +1,4 @@
-// Copyright 2020 Google LLC
+// Copyright 2020, 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ func Path(s string) (string, error) {
 
 // Env returns additional environmental variables to pass to subprocesses.
 // Each element is of the form “key=value”.  Pass these variables to
-// Bazel-built binaries so they can find their runfiles as well.
+// Bazel-built binaries so they can find their runfiles as well.  See the
+// Runfiles example for an illustration of this.
 //
 // The return value is a newly-allocated slice; you can modify it at will.
 func Env() ([]string, error) {

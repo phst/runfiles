@@ -132,7 +132,8 @@ func (r *Runfiles) Path(s string) (string, error) {
 
 // Env returns additional environmental variables to pass to subprocesses.
 // Each element is of the form “key=value”.  Pass these variables to
-// Bazel-built binaries so they can find their runfiles as well.
+// Bazel-built binaries so they can find their runfiles as well.  See the
+// Runfiles example for an illustration of this.
 //
 // The return value is a newly-allocated slice; you can modify it at will.
 func (r *Runfiles) Env() []string {
