@@ -126,7 +126,7 @@ func (r *Runfiles) Path(s string) (string, error) {
 	}
 	impl := r.impl
 	if impl == nil {
-		return "", errors.New("uninitialized Runfiles object")
+		return "", errors.New("runfiles: uninitialized Runfiles object")
 	}
 	p := impl.path(s)
 	if p == "" {
