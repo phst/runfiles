@@ -1,4 +1,4 @@
-// Copyright 2020 Google LLC
+// Copyright 2020, 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,6 +48,8 @@ func ExampleRunfiles() {
 		panic(err)
 	}
 	cmd := exec.Command(prog)
+	// We add r.Env() after os.Environ() so that runfile environment
+	// variables override anything set in the process environment.
 	cmd.Env = append(os.Environ(), r.Env()...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
