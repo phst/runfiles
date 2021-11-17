@@ -116,13 +116,13 @@ func (r *Runfiles) Path(s string) (string, error) {
 		return "", errors.New("runfiles: name may not be empty")
 	}
 	if path.IsAbs(s) {
-		return "", fmt.Errorf("runfiles: name %s may not be absolute", s)
+		return "", fmt.Errorf("runfiles: name %q may not be absolute", s)
 	}
 	if s != path.Clean(s) {
-		return "", fmt.Errorf("runfiles: name %s must be canonical", s)
+		return "", fmt.Errorf("runfiles: name %q must be canonical", s)
 	}
 	if s == ".." || strings.HasPrefix(s, "../") {
-		return "", fmt.Errorf("runfiles: name %s may not contain a parent directory", s)
+		return "", fmt.Errorf("runfiles: name %q may not contain a parent directory", s)
 	}
 	impl := r.impl
 	if impl == nil {

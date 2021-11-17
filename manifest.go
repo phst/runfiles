@@ -47,7 +47,7 @@ func (f ManifestFile) parse() (manifest, error) {
 	for s.Scan() {
 		fields := strings.SplitN(s.Text(), " ", 2)
 		if len(fields) != 2 || fields[0] == "" || fields[1] == "" {
-			return nil, fmt.Errorf("runfiles: bad manifest line %s in file %s", s.Text(), f)
+			return nil, fmt.Errorf("runfiles: bad manifest line %q in file %s", s.Text(), f)
 		}
 		m[fields[0]] = fields[1]
 	}
