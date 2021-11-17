@@ -1,4 +1,4 @@
-// Copyright 2020 Google LLC
+// Copyright 2020, 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ func (f ManifestFile) parse() (manifest, error) {
 	for s.Scan() {
 		fields := strings.SplitN(s.Text(), " ", 2)
 		if len(fields) != 2 || fields[0] == "" || fields[1] == "" {
-			return nil, fmt.Errorf("runfiles: bad manifest line %s in file %s", s.Text(), m)
+			return nil, fmt.Errorf("runfiles: bad manifest line %s in file %s", s.Text(), f)
 		}
 		m[fields[0]] = fields[1]
 	}
