@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"testing"
 
 	"github.com/phst/runfiles"
@@ -80,5 +81,22 @@ func TestRunfiles_zero(t *testing.T) {
 	}
 	if got := r.Env(); got != nil {
 		t.Errorf("Env: got %v, want nil", got)
+	}
+}
+
+func TestRunfiles_empty(t *testing.T) {
+	dir := t.TempDir()
+	manifest := filepath.Join(dir, "manifest")
+	if err := os.WriteFile(manifest, []byte("__init__.py \n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	r, err := runfiles.New(runfiles.ManifestFile(manifest), runfiles.ProgramName("/invalid"), runfiles.Directory("/invalid"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, got := r.Path("__init__.py")
+	want := runfiles.ErrEmpty
+	if got != want {
+		t.Errorf("Path for empty file: got error %q, want %q", got, want)
 	}
 }

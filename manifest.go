@@ -46,7 +46,7 @@ func (f ManifestFile) parse() (manifest, error) {
 	m := make(manifest)
 	for s.Scan() {
 		fields := strings.SplitN(s.Text(), " ", 2)
-		if len(fields) != 2 || fields[0] == "" || fields[1] == "" {
+		if len(fields) != 2 || fields[0] == "" {
 			return nil, fmt.Errorf("runfiles: bad manifest line %q in file %s", s.Text(), f)
 		}
 		m[fields[0]] = fields[1]
@@ -57,8 +57,9 @@ func (f ManifestFile) parse() (manifest, error) {
 	return m, nil
 }
 
-func (m manifest) path(s string) string {
-	return m[s]
+func (m manifest) path(s string) (string, bool) {
+	r, ok := m[s]
+	return r, ok
 }
 
 const manifestFileVar = "RUNFILES_MANIFEST_FILE"

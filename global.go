@@ -17,7 +17,9 @@ package runfiles
 import "sync"
 
 // Path returns the absolute path name of a runfile.  The runfile name must be
-// a relative path, using the slash (not backslash) as directory separator.
+// a relative path, using the slash (not backslash) as directory separator.  If
+// the runfiles manifest maps s to an empty name (indicating an empty runfile
+// not present in the filesystem), Path returns ErrEmpty.
 func Path(s string) (string, error) {
 	r, err := g.get()
 	if err != nil {

@@ -108,7 +108,9 @@ func New(opts ...Option) (*Runfiles, error) {
 
 // Path returns the absolute path name of a runfile.  The runfile name must be
 // a relative path, using the slash (not backslash) as directory separator.  If
-// r is the zero Runfiles object, Path always returns an error.
+// r is the zero Runfiles object, Path always returns an error.  If the
+// runfiles manifest maps s to an empty name (indicating an empty runfile not
+// present in the filesystem), Path returns ErrEmpty.
 func (r *Runfiles) Path(s string) (string, error) {
 	// See section “Library interface” in
 	// https://docs.google.com/document/d/e/2PACX-1vSDIrFnFvEYhKsCMdGdD40wZRBX3m3aZ5HhVj4CtHPmiXKDCxioTUbYsDydjKtFDAzER5eg7OjJWs3V/pub.
@@ -128,8 +130,11 @@ func (r *Runfiles) Path(s string) (string, error) {
 	if impl == nil {
 		return "", errors.New("runfiles: uninitialized Runfiles object")
 	}
-	p := impl.path(s)
+	p, ok := impl.path(s)
 	if p == "" {
+		if ok {
+			return "", ErrEmpty
+		}
 		return "", &os.PathError{"stat", s, os.ErrNotExist}
 	}
 	return p, nil
@@ -158,6 +163,10 @@ type Option interface {
 // os.Args[0].
 type ProgramName string
 
+// ErrEmpty indicates that a runfile isn’t present in the filesystem, but
+// should be created as an empty file if necessary.
+var ErrEmpty = errors.New("empty runfile")
+
 type options struct {
 	program   ProgramName
 	manifest  ManifestFile
@@ -169,5 +178,5 @@ func (m ManifestFile) apply(o *options) { o.manifest = m }
 func (d Directory) apply(o *options)    { o.directory = d }
 
 type runfiles interface {
-	path(string) string
+	path(string) (string, bool)
 }

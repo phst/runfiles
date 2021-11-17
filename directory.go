@@ -1,4 +1,4 @@
-// Copyright 2020 Google LLC
+// Copyright 2020, 2021, 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ func (d Directory) new() *Runfiles {
 	return &Runfiles{d, directoryVar + "=" + string(d)}
 }
 
-func (d Directory) path(s string) string {
-	return filepath.Join(string(d), filepath.FromSlash(s))
+func (d Directory) path(s string) (string, bool) {
+	return filepath.Join(string(d), filepath.FromSlash(s)), true
 }
 
 const directoryVar = "RUNFILES_DIR"

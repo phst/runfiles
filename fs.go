@@ -17,8 +17,10 @@
 package runfiles
 
 import (
+	"io"
 	"io/fs"
 	"os"
+	"time"
 )
 
 // Open implements fs.FS.Open.
@@ -27,6 +29,9 @@ func (r *Runfiles) Open(name string) (fs.File, error) {
 		return nil, &fs.PathError{"open", name, fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
+	if err == ErrEmpty {
+		return emptyFile(name), nil
+	}
 	if err != nil {
 		return nil, &fs.PathError{"open", name, err}
 	}
@@ -39,6 +44,9 @@ func (r *Runfiles) Stat(name string) (fs.FileInfo, error) {
 		return nil, &fs.PathError{"stat", name, fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
+	if err == ErrEmpty {
+		return emptyFileInfo(name), nil
+	}
 	if err != nil {
 		return nil, &fs.PathError{"stat", name, err}
 	}
@@ -51,8 +59,26 @@ func (r *Runfiles) ReadFile(name string) ([]byte, error) {
 		return nil, &fs.PathError{"open", name, fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
+	if err == ErrEmpty {
+		return nil, nil
+	}
 	if err != nil {
 		return nil, &fs.PathError{"open", name, err}
 	}
 	return os.ReadFile(p)
 }
+
+type emptyFile string
+
+func (f emptyFile) Stat() (fs.FileInfo, error) { return emptyFileInfo(f), nil }
+func (f emptyFile) Read([]byte) (int, error)   { return 0, io.EOF }
+func (emptyFile) Close() error                 { return nil }
+
+type emptyFileInfo string
+
+func (i emptyFileInfo) Name() string     { return string(i) }
+func (emptyFileInfo) Size() int64        { return 0 }
+func (emptyFileInfo) Mode() fs.FileMode  { return 0444 }
+func (emptyFileInfo) ModTime() time.Time { return time.Time{} }
+func (emptyFileInfo) IsDir() bool        { return false }
+func (emptyFileInfo) Sys() interface{}   { return nil }
