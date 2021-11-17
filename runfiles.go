@@ -135,7 +135,7 @@ func (r *Runfiles) Path(s string) (string, error) {
 		if ok {
 			return "", ErrEmpty
 		}
-		return "", &os.PathError{"stat", s, os.ErrNotExist}
+		return "", os.ErrNotExist
 	}
 	return p, nil
 }
