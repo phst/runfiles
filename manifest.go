@@ -18,6 +18,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -49,7 +50,7 @@ func (f ManifestFile) parse() (manifest, error) {
 		if len(fields) != 2 || fields[0] == "" {
 			return nil, fmt.Errorf("runfiles: bad manifest line %q in file %s", s.Text(), f)
 		}
-		m[fields[0]] = fields[1]
+		m[fields[0]] = filepath.FromSlash(fields[1])
 	}
 	if err := s.Err(); err != nil {
 		return nil, fmt.Errorf("runfiles: error parsing manifest file %s: %w", f, err)
