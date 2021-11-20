@@ -133,9 +133,9 @@ func (r *Runfiles) Path(s string) (string, error) {
 	p, ok := impl.path(s)
 	if p == "" {
 		if ok {
-			return "", ErrEmpty
+			return "", Error{s, ErrEmpty}
 		}
-		return "", os.ErrNotExist
+		return "", Error{s, os.ErrNotExist}
 	}
 	return p, nil
 }
@@ -162,6 +162,23 @@ type Option interface {
 // ProgramName is an Option that sets the program name.  If not set, New uses
 // os.Args[0].
 type ProgramName string
+
+// Error represents a failure to look up a runfile.
+type Error struct {
+	// Runfile name that caused the failure.
+	Name string
+
+	// Underlying error.
+	Err error
+}
+
+// Error implements error.Error.
+func (e Error) Error() string {
+	return fmt.Sprintf("runfile %q: %s", e.Name, e.Err.Error())
+}
+
+// Unwrap returns the underlying error, for errors.Unwrap.
+func (e Error) Unwrap() error { return e.Err }
 
 // ErrEmpty indicates that a runfile isn’t present in the filesystem, but
 // should be created as an empty file if necessary.
