@@ -17,6 +17,7 @@
 package runfiles
 
 import (
+	"errors"
 	"io"
 	"io/fs"
 	"os"
@@ -29,7 +30,7 @@ func (r *Runfiles) Open(name string) (fs.File, error) {
 		return nil, &fs.PathError{"open", name, fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
-	if err == ErrEmpty {
+	if errors.Is(err, ErrEmpty) {
 		return emptyFile(name), nil
 	}
 	if err != nil {
@@ -44,7 +45,7 @@ func (r *Runfiles) Stat(name string) (fs.FileInfo, error) {
 		return nil, &fs.PathError{"stat", name, fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
-	if err == ErrEmpty {
+	if errors.Is(err, ErrEmpty) {
 		return emptyFileInfo(name), nil
 	}
 	if err != nil {
@@ -59,7 +60,7 @@ func (r *Runfiles) ReadFile(name string) ([]byte, error) {
 		return nil, &fs.PathError{"open", name, fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
-	if err == ErrEmpty {
+	if errors.Is(err, ErrEmpty) {
 		return nil, nil
 	}
 	if err != nil {

@@ -15,6 +15,7 @@
 package runfiles_test
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -96,7 +97,7 @@ func TestRunfiles_empty(t *testing.T) {
 	}
 	_, got := r.Path("__init__.py")
 	want := runfiles.ErrEmpty
-	if got != want {
-		t.Errorf("Path for empty file: got error %q, want %q", got, want)
+	if !errors.Is(got, want) {
+		t.Errorf("Path for empty file: got error %q, want something that wraps %q", got, want)
 	}
 }

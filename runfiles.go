@@ -110,7 +110,7 @@ func New(opts ...Option) (*Runfiles, error) {
 // a relative path, using the slash (not backslash) as directory separator.  If
 // r is the zero Runfiles object, Path always returns an error.  If the
 // runfiles manifest maps s to an empty name (indicating an empty runfile not
-// present in the filesystem), Path returns ErrEmpty.
+// present in the filesystem), Path returns an error that wraps ErrEmpty.
 func (r *Runfiles) Path(s string) (string, error) {
 	// See section “Library interface” in
 	// https://docs.google.com/document/d/e/2PACX-1vSDIrFnFvEYhKsCMdGdD40wZRBX3m3aZ5HhVj4CtHPmiXKDCxioTUbYsDydjKtFDAzER5eg7OjJWs3V/pub.
