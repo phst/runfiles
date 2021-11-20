@@ -25,8 +25,8 @@ func (d Directory) new() *Runfiles {
 	return &Runfiles{d, directoryVar + "=" + string(d)}
 }
 
-func (d Directory) path(s string) (string, bool) {
-	return filepath.Join(string(d), filepath.FromSlash(s)), true
+func (d Directory) path(s string) (string, error) {
+	return filepath.Join(string(d), filepath.FromSlash(s)), nil
 }
 
 const directoryVar = "RUNFILES_DIR"

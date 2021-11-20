@@ -58,9 +58,15 @@ func (f ManifestFile) parse() (manifest, error) {
 	return m, nil
 }
 
-func (m manifest) path(s string) (string, bool) {
+func (m manifest) path(s string) (string, error) {
 	r, ok := m[s]
-	return r, ok
+	if !ok {
+		return "", os.ErrNotExist
+	}
+	if r == "" {
+		return "", ErrEmpty
+	}
+	return r, nil
 }
 
 const manifestFileVar = "RUNFILES_MANIFEST_FILE"

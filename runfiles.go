@@ -130,12 +130,9 @@ func (r *Runfiles) Path(s string) (string, error) {
 	if impl == nil {
 		return "", errors.New("runfiles: uninitialized Runfiles object")
 	}
-	p, ok := impl.path(s)
-	if p == "" {
-		if ok {
-			return "", Error{s, ErrEmpty}
-		}
-		return "", Error{s, os.ErrNotExist}
+	p, err := impl.path(s)
+	if err != nil {
+		return "", Error{s, err}
 	}
 	return p, nil
 }
@@ -195,5 +192,5 @@ func (m ManifestFile) apply(o *options) { o.manifest = m }
 func (d Directory) apply(o *options)    { o.directory = d }
 
 type runfiles interface {
-	path(string) (string, bool)
+	path(string) (string, error)
 }
