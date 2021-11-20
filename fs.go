@@ -34,7 +34,7 @@ func (r *Runfiles) Open(name string) (fs.File, error) {
 		return emptyFile(name), nil
 	}
 	if err != nil {
-		return nil, &fs.PathError{"open", name, err}
+		return nil, pathError("open", name, err)
 	}
 	return os.Open(p)
 }
@@ -49,7 +49,7 @@ func (r *Runfiles) Stat(name string) (fs.FileInfo, error) {
 		return emptyFileInfo(name), nil
 	}
 	if err != nil {
-		return nil, &fs.PathError{"stat", name, err}
+		return nil, pathError("stat", name, err)
 	}
 	return os.Stat(p)
 }
@@ -64,7 +64,7 @@ func (r *Runfiles) ReadFile(name string) ([]byte, error) {
 		return nil, nil
 	}
 	if err != nil {
-		return nil, &fs.PathError{"open", name, err}
+		return nil, pathError("open", name, err)
 	}
 	return os.ReadFile(p)
 }
@@ -83,3 +83,16 @@ func (emptyFileInfo) Mode() fs.FileMode  { return 0444 }
 func (emptyFileInfo) ModTime() time.Time { return time.Time{} }
 func (emptyFileInfo) IsDir() bool        { return false }
 func (emptyFileInfo) Sys() interface{}   { return nil }
+
+func pathError(op, name string, err error) error {
+	if err == nil {
+		return nil
+	}
+	var rerr Error
+	if errors.As(err, &rerr) {
+		// Unwrap the error because we don’t need the failing name
+		// twice.
+		return &fs.PathError{op, rerr.Name, rerr.Err}
+	}
+	return &fs.PathError{op, name, err}
+}
