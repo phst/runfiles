@@ -89,6 +89,12 @@ func New(opts ...Option) (*Runfiles, error) {
 	}
 	// See section “Runfiles discovery” in
 	// https://docs.google.com/document/d/e/2PACX-1vSDIrFnFvEYhKsCMdGdD40wZRBX3m3aZ5HhVj4CtHPmiXKDCxioTUbYsDydjKtFDAzER5eg7OjJWs3V/pub.
+	if o.manifest != "" {
+		return o.manifest.new()
+	}
+	if o.directory != "" {
+		return o.directory.new(), nil
+	}
 	manifest := ManifestFile(o.program + ".runfiles_manifest")
 	if stat, err := os.Stat(string(manifest)); err == nil && stat.Mode().IsRegular() {
 		return manifest.new()
@@ -96,12 +102,6 @@ func New(opts ...Option) (*Runfiles, error) {
 	dir := Directory(o.program + ".runfiles")
 	if stat, err := os.Stat(string(dir)); err == nil && stat.IsDir() {
 		return dir.new(), nil
-	}
-	if o.manifest != "" {
-		return o.manifest.new()
-	}
-	if o.directory != "" {
-		return o.directory.new(), nil
 	}
 	return nil, errors.New("runfiles: no runfiles found")
 }
