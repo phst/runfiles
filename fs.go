@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2021, 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import (
 // Open implements fs.FS.Open.
 func (r *Runfiles) Open(name string) (fs.File, error) {
 	if !fs.ValidPath(name) {
-		return nil, &fs.PathError{"open", name, fs.ErrInvalid}
+		return nil, &fs.PathError{Op: "open", Path: name, Err: fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
 	if errors.Is(err, ErrEmpty) {
@@ -42,7 +42,7 @@ func (r *Runfiles) Open(name string) (fs.File, error) {
 // Stat implements fs.StatFS.Stat.
 func (r *Runfiles) Stat(name string) (fs.FileInfo, error) {
 	if !fs.ValidPath(name) {
-		return nil, &fs.PathError{"stat", name, fs.ErrInvalid}
+		return nil, &fs.PathError{Op: "stat", Path: name, Err: fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
 	if errors.Is(err, ErrEmpty) {
@@ -57,7 +57,7 @@ func (r *Runfiles) Stat(name string) (fs.FileInfo, error) {
 // ReadFile implements fs.ReadFileFS.ReadFile.
 func (r *Runfiles) ReadFile(name string) ([]byte, error) {
 	if !fs.ValidPath(name) {
-		return nil, &fs.PathError{"open", name, fs.ErrInvalid}
+		return nil, &fs.PathError{Op: "open", Path: name, Err: fs.ErrInvalid}
 	}
 	p, err := r.Path(name)
 	if errors.Is(err, ErrEmpty) {
@@ -92,7 +92,7 @@ func pathError(op, name string, err error) error {
 	if errors.As(err, &rerr) {
 		// Unwrap the error because we don’t need the failing name
 		// twice.
-		return &fs.PathError{op, rerr.Name, rerr.Err}
+		return &fs.PathError{Op: op, Path: rerr.Name, Err: rerr.Err}
 	}
-	return &fs.PathError{op, name, err}
+	return &fs.PathError{Op: op, Path: name, Err: err}
 }
