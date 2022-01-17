@@ -1,4 +1,4 @@
-// Copyright 2020, 2021 Google LLC
+// Copyright 2020, 2021, 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ func TestRunfiles_empty(t *testing.T) {
 	if err := os.WriteFile(manifest, []byte("__init__.py \n"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	r, err := runfiles.New(runfiles.ManifestFile(manifest), runfiles.ProgramName("/invalid"), runfiles.Directory("/invalid"))
+	r, err := runfiles.New(runfiles.ManifestFile(manifest))
 	if err != nil {
 		t.Fatal(err)
 	}
