@@ -101,3 +101,30 @@ func TestRunfiles_empty(t *testing.T) {
 		t.Errorf("Path for empty file: got error %q, want something that wraps %q", got, want)
 	}
 }
+
+func TestRunfiles_manifestWithDir(t *testing.T) {
+	dir := t.TempDir()
+	manifest := filepath.Join(dir, "manifest")
+	if err := os.WriteFile(manifest, []byte("foo/dir path/to/foo/dir\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	r, err := runfiles.New(runfiles.ManifestFile(manifest))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for rlocation, want := range map[string]string{
+			"foo/dir":                    "path/to/foo/dir",
+			"foo/dir/file":               "path/to/foo/dir/file",
+			"foo/dir/deeply/nested/file": "path/to/foo/dir/deeply/nested/file",
+		} {
+		t.Run(rlocation, func(t *testing.T) {
+			got, err := r.Path(rlocation)
+			if err != nil {
+				t.Fatalf("Path failed: got unexpected error %q", err)
+			}
+			if got != want {
+				t.Errorf("Path failed: got %q, want %q", got, want)
+			}
+		})
+	}
+}
