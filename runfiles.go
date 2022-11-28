@@ -12,43 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package runfiles provides access to Bazel runfiles.  It is an alternative to
-// the official Bazel package
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/tools/bazel.
+// Package runfiles provides access to Bazel runfiles.
 //
-// Installation
-//
-// To use this package, first set up rules_go as described in
-// https://github.com/bazelbuild/rules_go#setup.  Then add the following
-// snippet to your Bazel WORKSPACE file:
-//
-//   load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-//   http_archive(
-//       name = "com_github_phst_runfiles",
-//       urls = ["https://github.com/phst/runfiles/archive/d76c5e27d2c33d3f00046dabba3cf23b78a7741a.zip"],
-//       sha256 = "0f2ba21f9461d0973f56132a5eea6abccddf368d5b04213a3779f91be4ae89d4",
-//       strip_prefix = "runfiles-d76c5e27d2c33d3f00046dabba3cf23b78a7741a",
-//   )
-//
-// Usage
-//
-// This package has two main entry points, the global functions Path and Env,
-// and the Runfiles type.
-//
-// Global functions
-//
-// For simple use cases that don’t require hermetic behavior, use the Path and
-// Env functions to access runfiles.  Use Path to find the filesystem location
-// of a runfile, and use Env to obtain environmental variables to pass on to
-// subprocesses.
-//
-// Runfiles type
-//
-// If you need hermetic behavior or want to change the runfiles discovery
-// process, use New to create a Runfiles object.  New accepts a few options to
-// change the discovery process.  Runfiles objects have methods Path and Env,
-// which correspond to the package-level functions.  On Go 1.16, *Runfiles
-// implements fs.FS, fs.StatFS, and fs.ReadFileFS.
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles instead.
 package runfiles
 
 import (
