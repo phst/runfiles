@@ -1,4 +1,4 @@
-// Copyright 2020, 2021 Google LLC
+// Copyright 2020, 2021, 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,69 +14,13 @@
 
 package runfiles
 
-import (
-	"bufio"
-	"fmt"
-	"os"
-	"path"
-	"path/filepath"
-	"strings"
-)
+import "github.com/bazelbuild/rules_go/go/runfiles"
 
 // ManifestFile specifies the location of the runfile manifest file.  You can
 // pass this as an option to New.  If unset or empty, use the value of the
 // environmental variable RUNFILES_MANIFEST_FILE.
-type ManifestFile string
-
-func (f ManifestFile) new() (*Runfiles, error) {
-	m, err := f.parse()
-	if err != nil {
-		return nil, err
-	}
-	return &Runfiles{m, manifestFileVar + "=" + string(f)}, nil
-}
-
-type manifest map[string]string
-
-func (f ManifestFile) parse() (manifest, error) {
-	r, err := os.Open(string(f))
-	if err != nil {
-		return nil, fmt.Errorf("runfiles: can’t open manifest file: %w", err)
-	}
-	defer r.Close()
-	s := bufio.NewScanner(r)
-	m := make(manifest)
-	for s.Scan() {
-		fields := strings.SplitN(s.Text(), " ", 2)
-		if len(fields) != 2 || fields[0] == "" {
-			return nil, fmt.Errorf("runfiles: bad manifest line %q in file %s", s.Text(), f)
-		}
-		m[fields[0]] = filepath.FromSlash(fields[1])
-	}
-	if err := s.Err(); err != nil {
-		return nil, fmt.Errorf("runfiles: error parsing manifest file %s: %w", f, err)
-	}
-	return m, nil
-}
-
-func (m manifest) path(s string) (string, error) {
-	r, ok := m[s]
-	if ok && r == "" {
-		return "", ErrEmpty
-	}
-	if ok {
-		return r, nil
-	}
-	// If path references a runfile that lies under a directory that itself is a
-	// runfile, then only the directory is listed in the manifest. Look up all
-	// prefixes of path in the manifest.
-	for prefix := s; prefix != ""; prefix, _ = path.Split(prefix) {
-		prefix = strings.TrimSuffix(prefix, "/")
-		if prefixMatch, ok := m[prefix]; ok {
-			return prefixMatch + strings.TrimPrefix(s, prefix), nil
-		}
-	}
-	return "", os.ErrNotExist
-}
-
-const manifestFileVar = "RUNFILES_MANIFEST_FILE"
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#ManifestFile
+// instead.
+type ManifestFile = runfiles.ManifestFile

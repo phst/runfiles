@@ -1,4 +1,4 @@
-// Copyright 2020, 2021 Google LLC
+// Copyright 2020, 2021, 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,30 @@
 
 package runfiles
 
-import "sync"
+import (
+	"fmt"
+	"path"
+	"strings"
+
+	"github.com/bazelbuild/rules_go/go/runfiles"
+)
 
 // Path returns the absolute path name of a runfile.  The runfile name must be
 // a relative path, using the slash (not backslash) as directory separator.  If
 // the runfiles manifest maps s to an empty name (indicating an empty runfile
 // not present in the filesystem), Path returns an error that wraps ErrEmpty.
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Rlocation
+// instead.
 func Path(s string) (string, error) {
-	r, err := g.get()
-	if err != nil {
-		return "", err
+	if path.IsAbs(s) {
+		return "", fmt.Errorf("runfiles: name %q may not be absolute", s)
 	}
-	return r.Path(s)
+	if s == ".." || strings.HasPrefix(s, "../") {
+		return "", fmt.Errorf("runfiles: name %q may not contain a parent directory", s)
+	}
+	return runfiles.Rlocation(s)
 }
 
 // Env returns additional environmental variables to pass to subprocesses.
@@ -34,27 +46,7 @@ func Path(s string) (string, error) {
 // Runfiles example for an illustration of this.
 //
 // The return value is a newly-allocated slice; you can modify it at will.
-func Env() ([]string, error) {
-	r, err := g.get()
-	if err != nil {
-		return nil, err
-	}
-	return r.Env(), nil
-}
-
-type global struct {
-	once sync.Once
-	r    *Runfiles
-	err  error
-}
-
-func (g *global) get() (*Runfiles, error) {
-	g.once.Do(g.init)
-	return g.r, g.err
-}
-
-func (g *global) init() {
-	g.r, g.err = New()
-}
-
-var g global
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Env instead.
+func Env() ([]string, error) { return runfiles.Env() }

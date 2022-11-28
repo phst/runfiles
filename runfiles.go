@@ -1,4 +1,4 @@
-// Copyright 2020, 2021 Google LLC
+// Copyright 2020, 2021, 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,58 +52,35 @@
 package runfiles
 
 import (
-	"errors"
 	"fmt"
-	"os"
 	"path"
 	"strings"
+
+	"github.com/bazelbuild/rules_go/go/runfiles"
 )
 
 // Runfiles allows access to Bazel runfiles.  Use New to create Runfiles
 // objects; the zero Runfiles object always returns errors.  See
 // https://docs.bazel.build/skylark/rules.html#runfiles for some information on
 // Bazel runfiles.
-type Runfiles struct {
-	// We don’t need concurrency control since Runfiles objects are
-	// immutable once created.
-	impl runfiles
-	env  string
-}
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Runfiles
+// instead.
+type Runfiles struct{ runfiles.Runfiles }
 
 // New creates a given Runfiles object.  By default, it uses os.Args and the
 // RUNFILES_MANIFEST_FILE and RUNFILES_DIR environmental variables to find the
 // runfiles location.  This can be overwritten by passing some options.
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#New instead.
 func New(opts ...Option) (*Runfiles, error) {
-	var o options
-	for _, a := range opts {
-		a.apply(&o)
+	impl, err := runfiles.New(opts...)
+	if err != nil {
+		return nil, err
 	}
-	if o.program == "" {
-		o.program = ProgramName(os.Args[0])
-	}
-	if o.manifest == "" {
-		o.manifest = ManifestFile(os.Getenv("RUNFILES_MANIFEST_FILE"))
-	}
-	if o.directory == "" {
-		o.directory = Directory(os.Getenv("RUNFILES_DIR"))
-	}
-	// See section “Runfiles discovery” in
-	// https://docs.google.com/document/d/e/2PACX-1vSDIrFnFvEYhKsCMdGdD40wZRBX3m3aZ5HhVj4CtHPmiXKDCxioTUbYsDydjKtFDAzER5eg7OjJWs3V/pub.
-	if o.manifest != "" {
-		return o.manifest.new()
-	}
-	if o.directory != "" {
-		return o.directory.new(), nil
-	}
-	manifest := ManifestFile(o.program + ".runfiles_manifest")
-	if stat, err := os.Stat(string(manifest)); err == nil && stat.Mode().IsRegular() {
-		return manifest.new()
-	}
-	dir := Directory(o.program + ".runfiles")
-	if stat, err := os.Stat(string(dir)); err == nil && stat.IsDir() {
-		return dir.new(), nil
-	}
-	return nil, errors.New("runfiles: no runfiles found")
+	return &Runfiles{*impl}, err
 }
 
 // Path returns the absolute path name of a runfile.  The runfile name must be
@@ -111,86 +88,45 @@ func New(opts ...Option) (*Runfiles, error) {
 // r is the zero Runfiles object, Path always returns an error.  If the
 // runfiles manifest maps s to an empty name (indicating an empty runfile not
 // present in the filesystem), Path returns an error that wraps ErrEmpty.
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Runfiles.Rlocation
+// instead.
 func (r *Runfiles) Path(s string) (string, error) {
-	// See section “Library interface” in
-	// https://docs.google.com/document/d/e/2PACX-1vSDIrFnFvEYhKsCMdGdD40wZRBX3m3aZ5HhVj4CtHPmiXKDCxioTUbYsDydjKtFDAzER5eg7OjJWs3V/pub.
-	if s == "" {
-		return "", errors.New("runfiles: name may not be empty")
-	}
 	if path.IsAbs(s) {
 		return "", fmt.Errorf("runfiles: name %q may not be absolute", s)
-	}
-	if s != path.Clean(s) {
-		return "", fmt.Errorf("runfiles: name %q must be canonical", s)
 	}
 	if s == ".." || strings.HasPrefix(s, "../") {
 		return "", fmt.Errorf("runfiles: name %q may not contain a parent directory", s)
 	}
-	impl := r.impl
-	if impl == nil {
-		return "", errors.New("runfiles: uninitialized Runfiles object")
-	}
-	p, err := impl.path(s)
-	if err != nil {
-		return "", Error{s, err}
-	}
-	return p, nil
-}
-
-// Env returns additional environmental variables to pass to subprocesses.
-// Each element is of the form “key=value”.  Pass these variables to
-// Bazel-built binaries so they can find their runfiles as well.  See the
-// Runfiles example for an illustration of this.
-//
-// The return value is a newly-allocated slice; you can modify it at will.  If
-// r is the zero Runfiles object, the return value is nil.
-func (r *Runfiles) Env() []string {
-	if r.env == "" {
-		return nil
-	}
-	return []string{r.env}
+	return r.Rlocation(s)
 }
 
 // Option is an option for the New function to override runfiles discovery.
-type Option interface {
-	apply(*options)
-}
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Option
+// instead.
+type Option = runfiles.Option
 
 // ProgramName is an Option that sets the program name.  If not set, New uses
 // os.Args[0].
-type ProgramName string
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#ProgramName
+// instead.
+type ProgramName = runfiles.ProgramName
 
 // Error represents a failure to look up a runfile.
-type Error struct {
-	// Runfile name that caused the failure.
-	Name string
-
-	// Underlying error.
-	Err error
-}
-
-// Error implements error.Error.
-func (e Error) Error() string {
-	return fmt.Sprintf("runfile %q: %s", e.Name, e.Err.Error())
-}
-
-// Unwrap returns the underlying error, for errors.Unwrap.
-func (e Error) Unwrap() error { return e.Err }
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Error instead.
+type Error = runfiles.Error
 
 // ErrEmpty indicates that a runfile isn’t present in the filesystem, but
 // should be created as an empty file if necessary.
-var ErrEmpty = errors.New("empty runfile")
-
-type options struct {
-	program   ProgramName
-	manifest  ManifestFile
-	directory Directory
-}
-
-func (p ProgramName) apply(o *options)  { o.program = p }
-func (m ManifestFile) apply(o *options) { o.manifest = m }
-func (d Directory) apply(o *options)    { o.directory = d }
-
-type runfiles interface {
-	path(string) (string, error)
-}
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#ErrEmpty
+// instead.
+var ErrEmpty = runfiles.ErrEmpty

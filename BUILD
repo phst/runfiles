@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2020, 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,13 +19,14 @@ go_library(
     name = "go_default_library",
     srcs = [
         "directory.go",
-        "fs.go",
         "global.go",
         "manifest.go",
         "runfiles.go",
     ],
+    deprecation = "use @io_bazel_rules_go//go/runfiles instead",
     importpath = "github.com/phst/runfiles",
     visibility = ["//visibility:public"],
+    deps = ["@io_bazel_rules_go//go/runfiles"],
 )
 
 go_test(

@@ -1,4 +1,4 @@
-// Copyright 2020, 2021, 2021 Google LLC
+// Copyright 2020, 2021, 2021, 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,19 +14,13 @@
 
 package runfiles
 
-import "path/filepath"
+import "github.com/bazelbuild/rules_go/go/runfiles"
 
 // Directory specifies the location of the runfiles directory.  You can pass
 // this as an option to New.  If unset or empty, use the value of the
 // environmental variable RUNFILES_DIR.
-type Directory string
-
-func (d Directory) new() *Runfiles {
-	return &Runfiles{d, directoryVar + "=" + string(d)}
-}
-
-func (d Directory) path(s string) (string, error) {
-	return filepath.Join(string(d), filepath.FromSlash(s)), nil
-}
-
-const directoryVar = "RUNFILES_DIR"
+//
+// Deprecated: use
+// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Directory
+// instead.
+type Directory = runfiles.Directory
