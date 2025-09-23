@@ -34,7 +34,7 @@ func TestFS(t *testing.T) {
 	var _ fs.FS = fsys
 	var _ fs.StatFS = fsys
 	var _ fs.ReadFileFS = fsys
-	if err := fstest.TestFS(fsys, "com_github_phst_runfiles/test.txt", "com_github_phst_runfiles/testprog/testprog"); err != nil {
+	if err := fstest.TestFS(fsys, "_main/test.txt", "_main/testprog/testprog"); err != nil {
 		t.Error(err)
 	}
 }

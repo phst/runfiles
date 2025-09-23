@@ -1,4 +1,4 @@
-// Copyright 2020, 2021, 2022 Google LLC
+// Copyright 2020, 2021, 2022, 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import (
 )
 
 func ExamplePath() {
-	path, err := runfiles.Path("com_github_phst_runfiles/test.txt")
+	path, err := runfiles.Path("_main/test.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +45,7 @@ func ExampleRunfiles() {
 	}
 	// The binary “testprog” is itself built with Bazel, and needs
 	// runfiles.
-	prog, err := r.Path("com_github_phst_runfiles/testprog/testprog")
+	prog, err := r.Path("_main/testprog/testprog")
 	if err != nil {
 		panic(err)
 	}
