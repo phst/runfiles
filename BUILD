@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@bazel_gazelle//:def.bzl", "gazelle")
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@gazelle//:def.bzl", "gazelle")
+load("@rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "go_default_library",
@@ -24,10 +24,10 @@ go_library(
         "manifest.go",
         "runfiles.go",
     ],
-    deprecation = "use @io_bazel_rules_go//go/runfiles instead",
+    deprecation = "use @rules_go//go/runfiles instead",
     importpath = "github.com/phst/runfiles",
     visibility = ["//visibility:public"],
-    deps = ["@io_bazel_rules_go//go/runfiles"],
+    deps = ["@rules_go//go/runfiles"],
 )
 
 go_test(
