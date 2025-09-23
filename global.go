@@ -1,4 +1,4 @@
-// Copyright 2020, 2021, 2022 Google LLC
+// Copyright 2020, 2021, 2022, 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,11 +25,9 @@ import (
 // Path returns the absolute path name of a runfile.  The runfile name must be
 // a relative path, using the slash (not backslash) as directory separator.  If
 // the runfiles manifest maps s to an empty name (indicating an empty runfile
-// not present in the filesystem), Path returns an error that wraps ErrEmpty.
+// not present in the filesystem), Path returns an error that wraps [ErrEmpty].
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Rlocation
-// instead.
+// Deprecated: use [runfiles.Rlocation] instead.
 func Path(s string) (string, error) {
 	if path.IsAbs(s) {
 		return "", fmt.Errorf("runfiles: name %q may not be absolute", s)
@@ -47,6 +45,5 @@ func Path(s string) (string, error) {
 //
 // The return value is a newly-allocated slice; you can modify it at will.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Env instead.
+// Deprecated: use [runfiles.Env] instead.
 func Env() ([]string, error) { return runfiles.Env() }

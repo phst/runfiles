@@ -1,4 +1,4 @@
-// Copyright 2020, 2021, 2022 Google LLC
+// Copyright 2020, 2021, 2022, 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
 
 // Package runfiles provides access to Bazel runfiles.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles instead.
+// Deprecated: use [github.com/bazelbuild/rules_go/go/runfiles] instead.
 package runfiles
 
 import (
@@ -31,17 +30,14 @@ import (
 // https://docs.bazel.build/skylark/rules.html#runfiles for some information on
 // Bazel runfiles.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Runfiles
-// instead.
+// Deprecated: use [runfiles.Runfiles] instead.
 type Runfiles struct{ runfiles.Runfiles }
 
-// New creates a given Runfiles object.  By default, it uses os.Args and the
+// New creates a given Runfiles object.  By default, it uses [os.Args] and the
 // RUNFILES_MANIFEST_FILE and RUNFILES_DIR environmental variables to find the
 // runfiles location.  This can be overwritten by passing some options.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#New instead.
+// Deprecated: use [runfiles.New] instead.
 func New(opts ...Option) (*Runfiles, error) {
 	impl, err := runfiles.New(opts...)
 	if err != nil {
@@ -52,13 +48,11 @@ func New(opts ...Option) (*Runfiles, error) {
 
 // Path returns the absolute path name of a runfile.  The runfile name must be
 // a relative path, using the slash (not backslash) as directory separator.  If
-// r is the zero Runfiles object, Path always returns an error.  If the
+// r is the zero [Runfiles] object, Path always returns an error.  If the
 // runfiles manifest maps s to an empty name (indicating an empty runfile not
-// present in the filesystem), Path returns an error that wraps ErrEmpty.
+// present in the filesystem), Path returns an error that wraps [ErrEmpty].
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Runfiles.Rlocation
-// instead.
+// Deprecated: use [runfiles.Runfiles.Rlocation] instead.
 func (r *Runfiles) Path(s string) (string, error) {
 	if path.IsAbs(s) {
 		return "", fmt.Errorf("runfiles: name %q may not be absolute", s)
@@ -69,31 +63,24 @@ func (r *Runfiles) Path(s string) (string, error) {
 	return r.Rlocation(s)
 }
 
-// Option is an option for the New function to override runfiles discovery.
+// Option is an option for the [New] function to override runfiles discovery.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Option
-// instead.
+// Deprecated: use [runfiles.Option] instead.
 type Option = runfiles.Option
 
-// ProgramName is an Option that sets the program name.  If not set, New uses
-// os.Args[0].
+// ProgramName is an [Option] that sets the program name.  If not set, [New]
+// uses os.Args[0].
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#ProgramName
-// instead.
+// Deprecated: use [runfiles.ProgramName] instead.
 type ProgramName = runfiles.ProgramName
 
 // Error represents a failure to look up a runfile.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Error instead.
+// Deprecated: use [runfiles.Error] instead.
 type Error = runfiles.Error
 
 // ErrEmpty indicates that a runfile isn’t present in the filesystem, but
 // should be created as an empty file if necessary.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#ErrEmpty
-// instead.
+// Deprecated: use [runfiles.ErrEmpty] instead.
 var ErrEmpty = runfiles.ErrEmpty

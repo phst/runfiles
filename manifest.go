@@ -1,4 +1,4 @@
-// Copyright 2020, 2021, 2022 Google LLC
+// Copyright 2020, 2021, 2022, 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@ package runfiles
 import "github.com/bazelbuild/rules_go/go/runfiles"
 
 // ManifestFile specifies the location of the runfile manifest file.  You can
-// pass this as an option to New.  If unset or empty, use the value of the
+// pass this as an option to [New].  If unset or empty, use the value of the
 // environmental variable RUNFILES_MANIFEST_FILE.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#ManifestFile
-// instead.
+// Deprecated: use [runfiles.ManifestFile] instead.
 type ManifestFile = runfiles.ManifestFile

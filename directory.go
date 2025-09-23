@@ -1,4 +1,4 @@
-// Copyright 2020, 2021, 2021, 2022 Google LLC
+// Copyright 2020, 2021, 2021, 2022, 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@ package runfiles
 import "github.com/bazelbuild/rules_go/go/runfiles"
 
 // Directory specifies the location of the runfiles directory.  You can pass
-// this as an option to New.  If unset or empty, use the value of the
+// this as an option to [New].  If unset or empty, use the value of the
 // environmental variable RUNFILES_DIR.
 //
-// Deprecated: use
-// https://pkg.go.dev/github.com/bazelbuild/rules_go/go/runfiles#Directory
-// instead.
+// Deprecated: use [runfiles.Directory] instead.
 type Directory = runfiles.Directory
