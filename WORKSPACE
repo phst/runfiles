@@ -1,4 +1,4 @@
-# Copyright 2020, 2021, 2022 Google LLC
+# Copyright 2020, 2021, 2022, 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ go_rules_dependencies()
 
 go_register_toolchains(
     nogo = "@io_bazel_rules_go//:tools_nogo",
-    version = "1.19.3",
+    version = "1.24.3",
 )
 
 http_archive(
