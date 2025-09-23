@@ -25,7 +25,7 @@ import (
 	"github.com/bazelbuild/rules_go/go/runfiles"
 )
 
-// Runfiles allows access to Bazel runfiles.  Use New to create Runfiles
+// Runfiles allows access to Bazel runfiles.  Use [New] to create Runfiles
 // objects; the zero Runfiles object always returns errors.  See
 // https://docs.bazel.build/skylark/rules.html#runfiles for some information on
 // Bazel runfiles.
