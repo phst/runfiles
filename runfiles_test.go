@@ -113,10 +113,10 @@ func TestRunfiles_manifestWithDir(t *testing.T) {
 		t.Fatal(err)
 	}
 	for rlocation, want := range map[string]string{
-			"foo/dir":                    "path/to/foo/dir",
-			"foo/dir/file":               "path/to/foo/dir/file",
-			"foo/dir/deeply/nested/file": "path/to/foo/dir/deeply/nested/file",
-		} {
+		"foo/dir":                    "path/to/foo/dir",
+		"foo/dir/file":               "path/to/foo/dir/file",
+		"foo/dir/deeply/nested/file": "path/to/foo/dir/deeply/nested/file",
+	} {
 		t.Run(rlocation, func(t *testing.T) {
 			got, err := r.Path(rlocation)
 			if err != nil {
