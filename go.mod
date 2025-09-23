@@ -14,6 +14,6 @@
 
 module github.com/phst/runfiles
 
-go 1.25.1
+go 1.24.3
 
 require github.com/bazelbuild/rules_go v0.57.0
