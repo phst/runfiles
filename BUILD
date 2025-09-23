@@ -19,6 +19,7 @@ go_library(
     name = "go_default_library",
     srcs = [
         "directory.go",
+        "fs.go",
         "global.go",
         "manifest.go",
         "runfiles.go",
